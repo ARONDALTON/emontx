@@ -56,8 +56,8 @@ See: https://github.com/openenergymonitor/emonhub/blob/emon-pi/configuration.md
 
 const int CT1 = 1; 
 const int CT2 = 1;                                                      // Set to 0 to disable
-const int CT3 = 1;
-const int CT4 = 1;
+const int CT3 = 0;
+const int CT4 = 0;
 
 
 #define RF_freq RF12_433MHZ                                                // Frequency of RF12B module can be RF12_433MHZ, RF12_868MHZ or RF12_915MHZ. You should use the one matching the module you have.
