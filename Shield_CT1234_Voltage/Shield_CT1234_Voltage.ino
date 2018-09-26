@@ -96,15 +96,16 @@ void setup()
   Serial.println(networkGroup);
   // }
    
-  if (CT1) ct1.current(1, 60.95);                                     // Setup emonTX CT channel (ADC input, calibration)
+  if (CT1) ct1.current(1, 63);                                     // aron change from 60.95 ..Setup emonTX CT channel (ADC input, calibration)
   if (CT2) ct2.current(2, 63);                                     // Calibration factor = CT ratio / burden resistance
-  if (CT3) ct3.current(3, 63);                                     // emonTx Shield Calibration factor = (100A / 0.05A) / 33 Ohms
-  if (CT4) ct4.current(4, 68); 
-  
-  if (CT1) ct1.voltage(0, 133.3, 1.7);                                // ct.voltageTX(ADC input, calibration, phase_shift) - make sure to select correct calibration for AC-AC adapter  http://openenergymonitor.org/emon/modules/emontx/firmware/calibration. Default set for Ideal Power adapter
-  if (CT2) ct2.voltage(0, 133.3, 1.7);                                // 268.97 for the UK adapter, 260 for the Euro and 130 for the US.
-  if (CT3) ct3.voltage(0, 133.3, 1.7);
-  if (CT4) ct4.voltage(0, 133.3, 1.7);
+  if (CT3) ct3.current(3, 70.8);                                     // emonTx Shield Calibration factor = (100A / 0.05A) / 33 Ohms
+  if (CT4) ct4.current(4, 96.9); 
+
+  const float Cvolt=135.05;
+  if (CT1) ct1.voltage(0, Cvolt, 1.7);                                // ct.voltageTX(ADC input, calibration, phase_shift) - make sure to select correct calibration for AC-AC adapter  http://openenergymonitor.org/emon/modules/emontx/firmware/calibration. Default set for Ideal Power adapter
+  if (CT2) ct2.voltage(0, Cvolt, 1.7);                                // 268.97 for the UK adapter, 260 for the Euro and 130 for the US.
+  if (CT3) ct3.voltage(0,  Cvolt, 1.7);
+  if (CT4) ct4.voltage(0, Cvolt,1.7);
   
   rf12_initialize(nodeID, RF_freq, networkGroup);                          // initialize RFM12B
   rf12_sleep(RF12_SLEEP);
@@ -121,7 +122,9 @@ void loop()
     ct1.calcVI(20,2000);                                                  // Calculate all. No.of crossings, time-out 
     emontx.power1 = ct1.realPower;
 //    Serial.print(emontx.power1);Serial.print(" ");
-    Serial.print(ct1.Irms);                                         
+    
+    Serial.print(emontx.power1);  
+    Serial.print(" ");Serial.print(ct1.Irms);                                     
   }
   
   emontx.Vrms = ct1.Vrms*100;                                            // AC Mains rms voltage 
@@ -129,21 +132,22 @@ void loop()
   if (CT2) {
     ct2.calcVI(20,2000);                                                  // Calculate all. No.of crossings, time-out 
     emontx.power2 = ct2.realPower;
-//    Serial.print(" "); Serial.print(emontx.power2);
+    Serial.print(" "); Serial.print(emontx.power2);
     Serial.print(" ");Serial.print(ct2.Irms);
+//    Serial.print(ct1.power1); 
   } 
 
   if (CT3) {
     ct3.calcVI(20,2000);                                                  // Calculate all. No.of crossings, time-out 
     emontx.power3 = ct3.realPower;
-//    Serial.print(" "); Serial.print(emontx.power3);
+    Serial.print(" "); Serial.print(emontx.power3);
     Serial.print(" ");Serial.print(ct3.Irms);
   } 
   
    if (CT4) {
      ct4.calcVI(20,2000);                                                  // Calculate all. No.of crossings, time-out 
     emontx.power4 = ct4.realPower;
-//    Serial.print(" "); Serial.print(emontx.power4);
+    Serial.print(" "); Serial.print(emontx.power4);
     Serial.print(" ");Serial.print(ct4.Irms);
   } 
   
